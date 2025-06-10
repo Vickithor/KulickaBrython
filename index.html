@@ -15,11 +15,11 @@
 <body onload="brython()">
     <canvas id="platno" width="400" height="400"></canvas>
     <script type="text/python">
-        from browser import document, timer
+        from browser import document, timer, window
 
         canvas = document["platno"]
-        ctx = canvas.getContext("2d")
-
+        ctx = window.getattr(canvas, "getContext")("2d")  # Přímé volání JavaScriptu
+        
         width, height = 400, 400
         x, y, speed_x, speed_y = 100, 100, 3, 3
         color = "yellow"
