@@ -1,47 +1,26 @@
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <title>Odrážející se kulička</title>
-    <style>
-        canvas {
-            background-color: black;
-            display: block;
-            margin: auto;
-        }
-    </style>
-</head>
-<body>
-    <canvas id="platno" width="400" height="400"></canvas>
-    <script>
-        const canvas = document.getElementById("platno");
-        const ctx = canvas.getContext("2d");
+<script type="text/python">
+    from browser import document, timer
+    from browser.graphics import Canvas
 
-        let x = 100, y = 100;
-        let speedX = 3, speedY = 3;
-        const radius = 10;
+    width, height = 400, 400
+    x, y, speed_x, speed_y = 100, 100, 3, 3
+    color = "yellow"
 
-        function update() {
-            x += speedX;
-            y += speedY;
+    canvas = Canvas(document["platno"])
+    
+    def update():
+        global x, y, speed_x, speed_y
+        x += speed_x
+        y += speed_y
 
-            if (x - radius <= 0 || x + radius >= canvas.width) {
-                speedX *= -1;
-            }
-            if (y - radius <= 0 || y + radius >= canvas.height) {
-                speedY *= -1;
-            }
+        if x <= 10 or x >= width - 10:
+            speed_x *= -1
+        if y <= 10 or y >= height - 10:
+            speed_y *= -1
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "yellow";
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fill();
-
-            requestAnimationFrame(update);
-        }
-
-        update(); // Spustíme animaci
-    </script>
-</body>
-</html>
+        canvas.clear()
+        canvas.fill_style = color
+        canvas.fill_arc(x, y, 10, 0, 6.28)  # Kreslí kuličku jako kruh
+        
+    timer.set_interval(update, 30)
+</script>
