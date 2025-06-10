@@ -1,26 +1,44 @@
-<script type="text/python">
-    from browser import document, timer
-    from browser.graphics import Canvas
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Odrážející se kulička</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.11.3/brython.min.js"></script>
+    <style>
+        canvas {
+            background-color: black;
+            display: block;
+            margin: auto;
+        }
+    </style>
+</head>
+<body onload="brython()">
+    <canvas id="platno" width="400" height="400"></canvas>
+    <script type="text/python">
+        from browser import document, timer
+        from browser.graphics import Canvas
 
-    width, height = 400, 400
-    x, y, speed_x, speed_y = 100, 100, 3, 3
-    color = "yellow"
+        width, height = 400, 400
+        x, y, speed_x, speed_y = 100, 100, 3, 3
+        color = "yellow"
 
-    canvas = Canvas(document["platno"])
-    
-    def update():
-        global x, y, speed_x, speed_y
-        x += speed_x
-        y += speed_y
-
-        if x <= 10 or x >= width - 10:
-            speed_x *= -1
-        if y <= 10 or y >= height - 10:
-            speed_y *= -1
-
-        canvas.clear()
-        canvas.fill_style = color
-        canvas.fill_arc(x, y, 10, 0, 6.28)  # Kreslí kuličku jako kruh
+        canvas = Canvas(document["platno"])
         
-    timer.set_interval(update, 30)
-</script>
+        def update():
+            global x, y, speed_x, speed_y
+            x += speed_x
+            y += speed_y
+
+            if x <= 0 or x >= width-20:
+                speed_x *= -1
+            if y <= 0 or y >= height-20:
+                speed_y *= -1
+
+            canvas.clear()
+            canvas.fill_style = color
+            canvas.fill_arc(x, y, 10, 0, 6.28)
+        
+        timer.set_interval(update, 30)
+    </script>
+</body>
+</html>
