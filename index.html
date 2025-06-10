@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Odrážející se kulička</title>
+    <title>Kulička přes Brython</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.11.3/brython.min.js"></script>
     <style>
         canvas {
@@ -15,33 +15,39 @@
 <body onload="brython()">
     <canvas id="platno" width="400" height="400"></canvas>
     <script type="text/python">
-        from browser import document, timer, window
+        from browser import document, timer
 
         canvas = document["platno"]
-        ctx = window.getattr(canvas, "getContext")("2d")  # Přímé volání JavaScriptu
-        
-        width, height = 400, 400
-        x, y, speed_x, speed_y = 100, 100, 3, 3
-        color = "yellow"
+        ctx = canvas.getContext("2d")
+
+        # Startovní pozice kuličky
+        x, y = 100, 100
+        speed_x, speed_y = 3, 3
+        radius = 10
 
         def update():
             global x, y, speed_x, speed_y
 
+            # Aktualizace pozice
             x += speed_x
             y += speed_y
 
-            if x <= 10 or x >= width - 10:
+            # Odrazy od okrajů
+            if x - radius <= 0 or x + radius >= canvas.width:
                 speed_x *= -1
-            if y <= 10 or y >= height - 10:
+            if y - radius <= 0 or y + radius >= canvas.height:
                 speed_y *= -1
 
-            ctx.clearRect(0, 0, width, height)  # Vyčistí plátno
-            ctx.fillStyle = color
+            # Vyčištění plátna
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+            # Vykreslení kuličky
+            ctx.fillStyle = "yellow"
             ctx.beginPath()
-            ctx.arc(x, y, 10, 0, 6.28)  # Kreslení kuličky
+            ctx.arc(x, y, radius, 0, 6.28)
             ctx.fill()
 
-        timer.set_interval(update, 30)
+        timer.set_interval(update, 30)  # Animace každých 30 ms
     </script>
 </body>
 </html>
