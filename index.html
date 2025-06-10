@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Odrážející se kulička</title>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.11.3/brython.min.js"></script>
     <style>
         canvas {
             background-color: black;
@@ -12,36 +11,37 @@
         }
     </style>
 </head>
-<body onload="brython()">
+<body>
     <canvas id="platno" width="400" height="400"></canvas>
-    <script type="text/python">
-        from browser import document, timer, window
+    <script>
+        const canvas = document.getElementById("platno");
+        const ctx = canvas.getContext("2d");
 
-        canvas = document["platno"]
-        ctx = window.getattr(canvas, "getContext")("2d")  # Přímé volání JavaScriptu
-        
-        width, height = 400, 400
-        x, y, speed_x, speed_y = 100, 100, 3, 3
-        color = "yellow"
+        let x = 100, y = 100;
+        let speedX = 3, speedY = 3;
+        const radius = 10;
 
-        def update():
-            global x, y, speed_x, speed_y
+        function update() {
+            x += speedX;
+            y += speedY;
 
-            x += speed_x
-            y += speed_y
+            if (x - radius <= 0 || x + radius >= canvas.width) {
+                speedX *= -1;
+            }
+            if (y - radius <= 0 || y + radius >= canvas.height) {
+                speedY *= -1;
+            }
 
-            if x <= 10 or x >= width - 10:
-                speed_x *= -1
-            if y <= 10 or y >= height - 10:
-                speed_y *= -1
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "yellow";
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
 
-            ctx.clearRect(0, 0, width, height)  # Vyčistí plátno
-            ctx.fillStyle = color
-            ctx.beginPath()
-            ctx.arc(x, y, 10, 0, 6.28)  # Kreslení kuličky
-            ctx.fill()
+            requestAnimationFrame(update);
+        }
 
-        timer.set_interval(update, 30)
+        update(); // Spustíme animaci
     </script>
 </body>
 </html>
